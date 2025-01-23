@@ -43,17 +43,6 @@
             android:src="@drawable/baseline_post_add_24"
             app:maxImageSize="40dp"/>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floating_button_span"
-            android:layout_marginVertical="26dp"
-            android:layout_marginEnd="100dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:src="@drawable/baseline_post_add_24"
-            app:maxImageSize="40dp"/>
-
     </RelativeLayout>
     
     <com.google.android.material.navigation.NavigationView

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
@@ -16,6 +17,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -24,6 +26,7 @@ import com.example.curse.adapter.JobsListAdapter;
 import com.example.curse.dataBase.RoomDB;
 import com.example.curse.models.Jobs;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +35,9 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
     RecyclerView recyclerView;
     int recyclerSpanCount = 1;
+
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
     FloatingActionButton floatingActionButton;
     JobsListAdapter jobsListAdapter;
     RoomDB database;
@@ -60,6 +66,29 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         jobs = database.mainDAO().getAll();
 
         updateRecycler(jobs);
+
+        drawerLayout = findViewById(R.id.main);
+        navigationView = findViewById(R.id.navigationView_menu);
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int itemId = item.getItemId();
+                if (itemId == R.id.favorite_btn) {
+                    drawerLayout.close();
+                    return true;
+                } else if (itemId == R.id.itemCount_btn) {
+                    if (recyclerSpanCount == 1)
+                        recyclerSpanCount = 2;
+                    else
+                        recyclerSpanCount = 1;
+                    updateRecycler(jobs);
+                    drawerLayout.close();
+                    return true;
+                }
+                return false;
+            }
+        });
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
