@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -25,7 +24,6 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.example.curse.adapter.JobsListAdapter;
 import com.example.curse.dataBase.RoomDB;
 import com.example.curse.models.Jobs;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -35,10 +33,10 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
     RecyclerView recyclerView;
     int recyclerSpanCount = 1;
+    boolean favoriteButtonSet = false;
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
-//    FloatingActionButton floatingActionButton;
     JobsListAdapter jobsListAdapter;
     RoomDB database;
     List<Jobs> jobs = new ArrayList<>();
@@ -58,8 +56,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         });
 
         recyclerView = findViewById(R.id.recycler_home);
-//        floatingActionButton = findViewById(R.id.floating_button);
-
         searchViewHome = findViewById(R.id.searchView_home);
 
         database = RoomDB.getInstance(this);
@@ -75,33 +71,36 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itemId = item.getItemId();
                 if (itemId == R.id.favorite_btn) {
+                    if (!favoriteButtonSet)
+                        favoriteButtonSet = true;
+                    else
+                        favoriteButtonSet = false;
+
+                    filter("");
+
                     drawerLayout.close();
                     return true;
+
                 } else if (itemId == R.id.itemCount_btn) {
                     if (recyclerSpanCount == 1)
                         recyclerSpanCount = 2;
                     else
                         recyclerSpanCount = 1;
-                    updateRecycler(jobs);
+                    updateRecyclerSpanCount();
+
                     drawerLayout.close();
                     return true;
+
                 } else if (itemId == R.id.itemNewJob_btn) {
                     Intent intent = new Intent(MainActivity.this, JobsTakeActivity.class);
                     startActivityForResult(intent, 101);
+
                     drawerLayout.close();
                     return true;
                 }
                 return false;
             }
         });
-
-//        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, JobsTakeActivity.class);
-//                startActivityForResult(intent, 101);
-//            }
-//        });
 
         searchViewHome.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -121,10 +120,18 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     private void filter(String newText) {
         List<Jobs> filteredList = new ArrayList<>();
         for (Jobs singleJob : jobs) {
-            if (singleJob.getTitle().toLowerCase().contains(newText.toLowerCase())
-            || singleJob.getDescription().toLowerCase().contains(newText.toLowerCase())
-            || singleJob.getCost().toLowerCase().contains(newText.toLowerCase())) {
-                filteredList.add(singleJob);
+            if (favoriteButtonSet) {
+                if ((singleJob.getTitle().toLowerCase().contains(newText.toLowerCase())
+                        || singleJob.getDescription().toLowerCase().contains(newText.toLowerCase())
+                        || singleJob.getCost().toLowerCase().contains(newText.toLowerCase())) && singleJob.getPinned()) {
+                    filteredList.add(singleJob);
+                }
+            } else {
+                if (singleJob.getTitle().toLowerCase().contains(newText.toLowerCase())
+                        || singleJob.getDescription().toLowerCase().contains(newText.toLowerCase())
+                        || singleJob.getCost().toLowerCase().contains(newText.toLowerCase())) {
+                    filteredList.add(singleJob);
+                }
             }
         }
         jobsListAdapter.filterList(filteredList);
@@ -141,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 jobs.clear();
                 jobs.addAll(database.mainDAO().getAll());
                 jobsListAdapter.notifyDataSetChanged();
+                filter("");
             }
         }
         if (requestCode == 102) {
@@ -151,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 jobs.clear();
                 jobs.addAll(database.mainDAO().getAll());
                 jobsListAdapter.notifyDataSetChanged();
+                filter("");
             }
         }
     }
@@ -161,6 +170,10 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         jobsListAdapter = new JobsListAdapter(MainActivity.this, jobs ,jobsClickListener);
         recyclerView.setAdapter(jobsListAdapter);
 
+    }
+
+    private void updateRecyclerSpanCount() {
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(recyclerSpanCount, LinearLayoutManager.VERTICAL));
     }
 
     private  final JobsClickListener jobsClickListener = new JobsClickListener() {

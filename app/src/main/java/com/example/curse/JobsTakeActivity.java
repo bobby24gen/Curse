@@ -75,7 +75,7 @@ public class JobsTakeActivity extends AppCompatActivity {
                     return;
                 }
 
-                SimpleDateFormat formatter = new SimpleDateFormat("EEE, d MMM yyyy HH:mm");
+                SimpleDateFormat formatter = new SimpleDateFormat("d MMM yyyy HH:mm");
                 Date date = new Date();
 
                 if(!isOldJob){
