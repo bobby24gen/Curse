@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
     DrawerLayout drawerLayout;
     NavigationView navigationView;
-    FloatingActionButton floatingActionButton;
+//    FloatingActionButton floatingActionButton;
     JobsListAdapter jobsListAdapter;
     RoomDB database;
     List<Jobs> jobs = new ArrayList<>();
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         });
 
         recyclerView = findViewById(R.id.recycler_home);
-        floatingActionButton = findViewById(R.id.floating_button);
+//        floatingActionButton = findViewById(R.id.floating_button);
 
         searchViewHome = findViewById(R.id.searchView_home);
 
@@ -85,18 +85,23 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                     updateRecycler(jobs);
                     drawerLayout.close();
                     return true;
+                } else if (itemId == R.id.itemNewJob_btn) {
+                    Intent intent = new Intent(MainActivity.this, JobsTakeActivity.class);
+                    startActivityForResult(intent, 101);
+                    drawerLayout.close();
+                    return true;
                 }
                 return false;
             }
         });
 
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, JobsTakeActivity.class);
-                startActivityForResult(intent, 101);
-            }
-        });
+//        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, JobsTakeActivity.class);
+//                startActivityForResult(intent, 101);
+//            }
+//        });
 
         searchViewHome.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

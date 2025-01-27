@@ -7,4 +7,7 @@
     <item android:id="@+id/itemCount_btn"
         android:title="Count columns"
         android:icon="@drawable/baseline_settings_24"/>
+    <item android:id="@+id/itemNewJob_btn"
+        android:title="New request"
+        android:icon="@drawable/baseline_post_add_24"/>
 </menu>
