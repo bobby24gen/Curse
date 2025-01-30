@@ -71,10 +71,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itemId = item.getItemId();
                 if (itemId == R.id.favorite_btn) {
-                    if (!favoriteButtonSet)
-                        favoriteButtonSet = true;
-                    else
-                        favoriteButtonSet = false;
+                    favoriteButtonSet = !favoriteButtonSet;
 
                     filter("");
 
@@ -123,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             if (favoriteButtonSet) {
                 if ((singleJob.getTitle().toLowerCase().contains(newText.toLowerCase())
                         || singleJob.getDescription().toLowerCase().contains(newText.toLowerCase())
-                        || singleJob.getCost().toLowerCase().contains(newText.toLowerCase())) && singleJob.getPinned()) {
+                        || singleJob.getCost().toLowerCase().contains(newText.toLowerCase())) && singleJob.getFavorite()) {
                     filteredList.add(singleJob);
                 }
             } else {
@@ -203,22 +200,24 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     public boolean onMenuItemClick(MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.pin_btn) {
-            if (selectedJob.getPinned()) {
-                database.mainDAO().pin(selectedJob.getID(), false);
+            if (selectedJob.getFavorite()) {
+                database.mainDAO().favor(selectedJob.getID(), false);
                 Toast.makeText(MainActivity.this, "Delete from favorites", Toast.LENGTH_SHORT).show();
             } else {
-                database.mainDAO().pin(selectedJob.getID(), true);
+                database.mainDAO().favor(selectedJob.getID(), true);
                 Toast.makeText(MainActivity.this, "Added to favorites", Toast.LENGTH_SHORT).show();
             }
             jobs.clear();
             jobs.addAll(database.mainDAO().getAll());
             jobsListAdapter.notifyDataSetChanged();
+            filter("");
             return true;
         } else if (itemId == R.id.delete_btn) {
+            Toast.makeText(MainActivity.this, "The application was deleted", Toast.LENGTH_SHORT).show();
             database.mainDAO().delete(selectedJob);
             jobs.remove(selectedJob);
             jobsListAdapter.notifyDataSetChanged();
-            Toast.makeText(MainActivity.this, "The application was deleted", Toast.LENGTH_SHORT).show();
+            filter("");
             return true;
         }
         return false;

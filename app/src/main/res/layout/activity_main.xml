@@ -33,17 +33,6 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"/>
 
-        <!--
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floating_button"
-            android:layout_margin="26dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:src="@drawable/baseline_post_add_24"
-            app:maxImageSize="40dp"/> -->
-
     </RelativeLayout>
     
     <com.google.android.material.navigation.NavigationView

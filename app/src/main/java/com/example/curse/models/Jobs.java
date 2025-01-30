@@ -24,8 +24,8 @@ public class Jobs implements Serializable {
     @ColumnInfo(name = "date")
     String date = "";
 
-    @ColumnInfo(name = "pinned")
-    boolean pinned = false;
+    @ColumnInfo(name = "favorite")
+    boolean favorite = false;
 
 
     public int getID() {
@@ -68,11 +68,11 @@ public class Jobs implements Serializable {
         this.date = date;
     }
 
-    public boolean getPinned() {
-        return pinned;
+    public boolean getFavorite() {
+        return favorite;
     }
 
-    public void setPinned(boolean pinned) {
-        this.pinned = pinned;
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 }

@@ -26,6 +26,6 @@ public interface MainDAO {
     @Query("UPDATE jobs SET title = :title, description = :description, cost = :cost WHERE ID = :id")
     void update (int id, String title, String description, String cost);
 
-    @Query("UPDATE jobs SET pinned = :pin WHERE ID = :id")
-    void pin (int id, boolean pin);
+    @Query("UPDATE jobs SET favorite = :favor WHERE ID = :id")
+    void favor (int id, boolean favor);
 }

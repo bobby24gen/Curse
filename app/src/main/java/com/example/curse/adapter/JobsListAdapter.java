@@ -49,7 +49,7 @@ public class JobsListAdapter extends RecyclerView.Adapter<JobsViewHolder> {
         holder.textView_date.setText(list.get(position).getDate());
         holder.textView_date.setSelected(true);
 
-        if (list.get(position).getPinned()) {
+        if (list.get(position).getFavorite()) {
             holder.imageView_pin.setImageResource(R.drawable.baseline_favorite_red_24);
         } else {
             holder.imageView_pin.setImageResource(0);
